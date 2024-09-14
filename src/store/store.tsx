@@ -20,6 +20,7 @@ const initialState: TaskState = {
   filterTask: [],
   selectedStatus: "ALL",
   editingTask: false,
+  showTaskAnimation: false,
 };
 
 const taskDataSlicer = createSlice({
@@ -72,12 +73,14 @@ const taskDataSlicer = createSlice({
       }
     },
     addNewTaskRun(state) {
+      state.selectedTaskId = undefined;
       state.addNewTask = true;
     },
     cancelAddNewTask(state) {
       state.addNewTask = false;
     },
     showTaskSelected(state, action) {
+      state.showTaskAnimation = true;
       state.addNewTask = false;
       if (state.selectedTaskId === action.payload) {
         state.selectedTaskId = undefined;

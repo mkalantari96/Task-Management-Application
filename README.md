@@ -1,4 +1,4 @@
-# Task Management Tools
+# Task Management Application
 
 This is a task management application built with **React** and **TypeScript**, using **Redux Toolkit** for state management. The app allows users to manage their tasks effectively by creating, editing, deleting, changing status, and filtering tasks.
 ![starting page for task management which show submit new task from](./Image%20of%20UI/Starting%20UI%20page.png)

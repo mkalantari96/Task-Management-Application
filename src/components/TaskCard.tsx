@@ -1,4 +1,12 @@
-import { Button, Typography, Card, CardContent, Grid2 } from "@mui/material";
+import {
+  Button,
+  Typography,
+  Card,
+  CardContent,
+  Grid2,
+  Fade,
+  Zoom,
+} from "@mui/material";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,11 +15,13 @@ import { SliceAction } from "../store/store";
 import DeleteTaskModal from "./DeleteTaskModal";
 import { TaskState } from "../types";
 import EditTaskModal from "./EditTaskModal";
+import NoTaskSelected from "./NoTaskSelected";
 
 export default function TaskCard() {
   const taskDataState = useSelector(
     (state: { taskData: TaskState }) => state.taskData
   );
+
   const dispatch = useDispatch();
   function handleChangeStatus() {
     dispatch(SliceAction.showChangeStatus());
@@ -22,6 +32,7 @@ export default function TaskCard() {
   function handleEditTask() {
     dispatch(SliceAction.editingTaskMode());
   }
+
   let content;
   if (taskDataState.selectedTaskId) {
     const selectedTask = taskDataState.tasks.find(
@@ -72,7 +83,7 @@ export default function TaskCard() {
                   textOverflow: "ellipsis",
                 }}
               >
-                {selectedTask.title}
+                {selectedTask?.title}
               </Typography>
               <Typography
                 variant="body2"
@@ -206,6 +217,7 @@ export default function TaskCard() {
       </Card>
     );
   } else {
+    return <NoTaskSelected />;
     content = (
       <Card sx={{ mx: "auto", px: 1, bgcolor: "#fff8f8" }}>
         <CardContent>
@@ -234,7 +246,7 @@ export default function TaskCard() {
       <DeleteTaskModal />
       <ChangeStatus />
       <EditTaskModal />
-      {content}
+      <Zoom in={taskDataState.showTaskAnimation}>{content}</Zoom>
     </>
   );
 }

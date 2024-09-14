@@ -9,13 +9,15 @@ import {
 } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import NotStartedOutlinedIcon from "@mui/icons-material/NotStartedOutlined";
-import StopCircleOutlinedIcon from "@mui/icons-material/StopCircleOutlined";
+import DownloadingIcon from "@mui/icons-material/Downloading";
 import { TaskListProps, TaskState } from "../types";
 import { useDispatch } from "react-redux";
 import { SliceAction } from "../store/store";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 export default function TaskList({ tasks, color, header }: TaskListProps) {
+  const [isDragMode, setIsDragMode] = useState(false);
   const taskDataState = useSelector(
     (state: { taskData: TaskState }) => state.taskData
   );
@@ -32,10 +34,12 @@ export default function TaskList({ tasks, color, header }: TaskListProps) {
   ) {
     e.dataTransfer.setData("text/plain", "");
     dispatch(SliceAction.setDragItem(taskID));
+    setIsDragMode(true);
   }
 
   function handleOnDragEnd() {
     dispatch(SliceAction.setDragItem(null));
+    setIsDragMode(false);
   }
 
   function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
@@ -63,28 +67,30 @@ export default function TaskList({ tasks, color, header }: TaskListProps) {
     }
 
     dispatch(SliceAction.setDragItem(null));
+    setIsDragMode(false);
   }
 
   const dataOfTasks = tasks.length ? (
     <List sx={{ mx: "1px" }}>
       {tasks.map(({ title, id, status }) => (
-        <div
-          key={id}
-          draggable={taskDataState.selectedStatus === "ALL"}
-          onDragStart={(e) => handleOnDragStart(e, id)}
-          onDragEnd={handleOnDragEnd}
-          onDragOver={handleDragOver}
-          onDrop={() => handleOnDrop(id)}
-          style={{
-            backgroundColor:
-              taskDataState.selectedTaskId === id ? "GrayText" : "inherit",
-            marginRight: "0.5rem",
-            marginLeft: "0.5rem",
-            borderRadius: "4px",
-            cursor: "grab",
-          }}
-        >
-          <ListItem>
+        <ListItem key={id}>
+          <div
+            key={id}
+            draggable={taskDataState.selectedStatus === "ALL"}
+            onDragStart={(e) => handleOnDragStart(e, id)}
+            onDragEnd={handleOnDragEnd}
+            onDragOver={handleDragOver}
+            onDrop={() => handleOnDrop(id)}
+            style={{
+              width: "100%",
+              backgroundColor:
+                taskDataState.selectedTaskId === id ? "GrayText" : "inherit",
+              marginRight: "0.5rem",
+              marginLeft: "0.5rem",
+              borderRadius: "4px",
+              cursor: "grab",
+            }}
+          >
             <ListItemButton onClick={() => handleClickTask(id)}>
               <ListItemText
                 primary={title}
@@ -112,29 +118,29 @@ export default function TaskList({ tasks, color, header }: TaskListProps) {
                   />
                 )}
                 {status === "TO DO" && (
-                  <StopCircleOutlinedIcon
+                  <NotStartedOutlinedIcon
                     sx={{
                       color:
                         taskDataState.selectedTaskId === id
-                          ? "White"
+                          ? "#White"
                           : "#333333",
                     }}
                   />
                 )}
                 {status === "IN PROGRESS" && (
-                  <NotStartedOutlinedIcon
+                  <DownloadingIcon
                     sx={{
                       color:
                         taskDataState.selectedTaskId === id
-                          ? "White"
+                          ? "#White"
                           : "#333333",
                     }}
                   />
                 )}
               </ListItemAvatar>
             </ListItemButton>
-          </ListItem>
-        </div>
+          </div>
+        </ListItem>
       ))}
     </List>
   ) : (

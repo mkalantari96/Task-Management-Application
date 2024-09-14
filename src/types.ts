@@ -29,6 +29,7 @@ export interface TaskState {
   filterTask: Task[];
   selectedStatus: string;
   editingTask: boolean;
+  showTaskAnimation: boolean;
 }
 
 // Type for Component Props
