@@ -1,7 +1,16 @@
 # Task Management Tools
 
-A task management application built using **React**, **TypeScript**, and **Redux Toolkit** for state management. This application allows users to manage tasks efficiently with features like task submission, editing, deletion, status updates, filtering, and drag-and-drop reordering.
+This is a task management application built with **React** and **TypeScript**, using **Redux Toolkit** for state management. The app allows users to manage their tasks effectively by creating, editing, deleting, changing status, and filtering tasks.
 ![starting page for task management which show submit new task from](./Image%20of%20UI/Starting%20UI%20page.png)
+
+## Tech Stack
+
+- **React**: JavaScript library for building user interfaces.
+- **TypeScript**: Strongly typed programming language that builds on JavaScript.
+- **Redux Toolkit**: Simplified and structured state management solution.
+- **Material UI**: React components for faster and easier web development, providing a responsive and polished UI.
+
+![show task details and filter bar for choose status](./Image%20of%20UI/Showing%20task%20details%20and%20filter%20Status.png)
 
 ## Features
 
@@ -15,14 +24,7 @@ A task management application built using **React**, **TypeScript**, and **Redux
 - **Task Filtering**: Filter tasks based on their current status.
 - **Drag and Drop**: Reorder tasks by dragging and dropping them within the task list.
 
-![show task details and filter bar for choose status](./Image%20of%20UI/Showing%20task%20details%20and%20filter%20Status.png)
 ![Drag and Drop to reoder task](./Image%20of%20UI/Drag%20and%20Drop%20to%20reorder%20task%20list.png)
-
-## Tech Stack
-
-- **React**: For building the user interface.
-- **TypeScript**: For static typing and enhanced code quality.
-- **Redux Toolkit**: For state management, enabling a centralized store for managing task data.
 
 ## How to Run the Project
 
