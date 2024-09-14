@@ -4,7 +4,6 @@ import { SliceAction } from "../store/store";
 import { TaskState } from "../types";
 import { ChangeEvent } from "react";
 
-
 export default function NewTask() {
   const taskDataStatus = useSelector(
     (state: { taskData: TaskState }) => state.taskData
@@ -117,7 +116,7 @@ export default function NewTask() {
               gap: "1rem",
             }}
           >
-            {taskDataStatus.tasks.length && (
+            {taskDataStatus.tasks.length > 0 && (
               <Button
                 type="button"
                 onClick={handleCancelSubmit}
