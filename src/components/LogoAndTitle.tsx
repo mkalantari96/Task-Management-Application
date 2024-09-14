@@ -32,7 +32,7 @@ export default function LogoAndTitle() {
             fontWeight: "800",
           }}
         >
-          Task Management Tools
+          Task Management App
         </Typography>
       </Grid>
     </Grid>
