@@ -21,7 +21,7 @@ export default function TaskList({ tasks, color, header }: TaskListProps) {
   );
 
   const dispatch = useDispatch();
-  let dataOfTasks;
+
   function handleClickTask(id: string) {
     dispatch(SliceAction.showTaskSelected(id));
   }
@@ -43,7 +43,7 @@ export default function TaskList({ tasks, color, header }: TaskListProps) {
   }
 
   function handleOnDrop(dropId: number | string) {
-    if (!taskDataState.draggingItem) return;
+    if (taskDataState.draggingItem === null) return;
 
     const draggedIndex = tasks.findIndex(
       (task) => task.id === taskDataState.draggingItem
@@ -65,101 +65,92 @@ export default function TaskList({ tasks, color, header }: TaskListProps) {
     dispatch(SliceAction.setDragItem(null));
   }
 
-  if (!tasks.length) {
-    dataOfTasks = (
-      <Typography
-        sx={{
-          mt: 2,
-          pb: 2,
-          color: "#333333",
-          textAlign: "center",
-          fontWeight: "600",
-          fontSize: "0.6rem",
-        }}
-      >
-        EMPTY
-      </Typography>
-    );
-  } else {
-    dataOfTasks = (
-      <List sx={{ mx: "1px" }}>
-        {tasks.map(({ title, id, status }) => (
-          <div
-            key={Number(id)}
-            draggable={
-              taskDataState.selectedStatus === "ALL" ? "true" : "false"
-            }
-            onDragStart={(e) => handleOnDragStart(e, id)}
-            onDragEnd={handleOnDragEnd}
-            onDragOver={handleDragOver}
-            onDrop={() => handleOnDrop(id)}
-            style={{
-              backgroundColor:
-                taskDataState.selectedTaskId === id ? "GrayText" : "inherit",
-              marginRight: "0.5rem",
-              marginLeft: "0.5rem",
-              borderRadius: "4px",
-              cursor: "grab",
-            }}
-          >
-            <ListItem key={id}>
-              <ListItemButton onClick={() => handleClickTask(id)}>
-                <ListItemText
-                  primary={title}
-                  sx={{
+  const dataOfTasks = tasks.length ? (
+    <List sx={{ mx: "1px" }}>
+      {tasks.map(({ title, id, status }) => (
+        <div
+          key={id}
+          draggable={taskDataState.selectedStatus === "ALL"}
+          onDragStart={(e) => handleOnDragStart(e, id)}
+          onDragEnd={handleOnDragEnd}
+          onDragOver={handleDragOver}
+          onDrop={() => handleOnDrop(id)}
+          style={{
+            backgroundColor:
+              taskDataState.selectedTaskId === id ? "GrayText" : "inherit",
+            marginRight: "0.5rem",
+            marginLeft: "0.5rem",
+            borderRadius: "4px",
+            cursor: "grab",
+          }}
+        >
+          <ListItem>
+            <ListItemButton onClick={() => handleClickTask(id)}>
+              <ListItemText
+                primary={title}
+                sx={{
+                  color:
+                    taskDataState.selectedTaskId === id ? "White" : "#333333",
+                  "& .MuiTypography-root": {
                     color:
                       taskDataState.selectedTaskId === id ? "White" : "#333333",
-
-                    "& .MuiTypography-root": {
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  },
+                }}
+              />
+              <ListItemAvatar>
+                {status === "DONE" && (
+                  <CheckCircleOutlineIcon
+                    sx={{
                       color:
                         taskDataState.selectedTaskId === id
                           ? "White"
                           : "#333333",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    },
-                  }}
-                />
-                <ListItemAvatar>
-                  {status === "DONE" && (
-                    <CheckCircleOutlineIcon
-                      sx={{
-                        color:
-                          taskDataState.selectedTaskId === id
-                            ? "White"
-                            : "#333333",
-                      }}
-                    />
-                  )}
-                  {status === "TO DO" && (
-                    <StopCircleOutlinedIcon
-                      sx={{
-                        color:
-                          taskDataState.selectedTaskId === id
-                            ? "White"
-                            : "#333333",
-                      }}
-                    />
-                  )}
-                  {status === "IN PROGRESS" && (
-                    <NotStartedOutlinedIcon
-                      sx={{
-                        color:
-                          taskDataState.selectedTaskId === id
-                            ? "White"
-                            : "#333333",
-                      }}
-                    />
-                  )}
-                </ListItemAvatar>
-              </ListItemButton>
-            </ListItem>
-          </div>
-        ))}
-      </List>
-    );
-  }
+                    }}
+                  />
+                )}
+                {status === "TO DO" && (
+                  <StopCircleOutlinedIcon
+                    sx={{
+                      color:
+                        taskDataState.selectedTaskId === id
+                          ? "White"
+                          : "#333333",
+                    }}
+                  />
+                )}
+                {status === "IN PROGRESS" && (
+                  <NotStartedOutlinedIcon
+                    sx={{
+                      color:
+                        taskDataState.selectedTaskId === id
+                          ? "White"
+                          : "#333333",
+                    }}
+                  />
+                )}
+              </ListItemAvatar>
+            </ListItemButton>
+          </ListItem>
+        </div>
+      ))}
+    </List>
+  ) : (
+    <Typography
+      sx={{
+        my: 2,
+        mx: "1rem",
+        textAlign: "center",
+        color: "text.secondary",
+        fontSize: 10,
+      }}
+    >
+      No Tasks Available
+    </Typography>
+  );
+
   return (
     <Grid2
       direction="column"
@@ -168,9 +159,9 @@ export default function TaskList({ tasks, color, header }: TaskListProps) {
       spacing={1}
       sx={{
         bgcolor: color,
-        overflowY: "scroll",
-        minHeight: "44vh",
-        maxHeight: "44vh",
+        overflowY: "auto",
+        minHeight: "60vh",
+        maxHeight: "60vh",
       }}
     >
       <Typography

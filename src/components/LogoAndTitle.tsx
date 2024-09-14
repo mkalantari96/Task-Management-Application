@@ -1,43 +1,40 @@
-import { Grid2, Typography } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 import LogoIcon from "../assets/logo.png";
+
 export default function LogoAndTitle() {
   return (
-    <Grid2
+    <Grid
       container
       alignItems="center"
       justifyContent="center"
       sx={{
-        py: "2rem",
-        px: "1rem",
+        py: { xs: "1rem", sm: "2rem" },
+        px: { xs: "0.5rem", sm: "1rem" },
         bgcolor: "#FFBE0B",
-        height: "100%",
-        mx: "auto",
+        height: "auto",
         color: "grey.800",
         borderTop: "1px solid",
-        borderRight: "1px solid",
         borderColor: "grey.300",
       }}
     >
-      <Grid2 container alignItems="center" justifyContent="center" size={3}>
+      <Grid item xs={3}>
         <img
           src={LogoIcon}
-          alt="a list of items to do"
-          style={{
-            width: "100%",
-          }}
+          alt="Logo"
+          style={{ width: "100%", maxWidth: "100px" }}
         />
-      </Grid2>
-      <Grid2 container alignItems="center" justifyContent="center" size={9}>
+      </Grid>
+      <Grid item xs={9} container alignItems="center" justifyContent="center">
         <Typography
           sx={{
             textAlign: "center",
-            fontSize: "0.8rem",
+            fontSize: { xs: "0.7rem", sm: "0.8rem" },
             fontWeight: "800",
           }}
         >
           Task Management Tools
         </Typography>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 }

@@ -7,11 +7,10 @@ import {
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SliceAction } from "../store/store";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import { TaskState } from "../types";
+import { useMemo } from "react";
 
 export default function SearchBox() {
   const taskDataState = useSelector(
@@ -19,21 +18,16 @@ export default function SearchBox() {
   );
   const dispatch = useDispatch();
 
-  let uniqueStatuses = [
-    ...new Set(taskDataState.tasks.map((task) => task.status)),
-  ];
-  useEffect(() => {
-    uniqueStatuses = [
-      ...new Set(taskDataState.tasks.map((task) => task.status)),
-    ];
-  }, [taskDataState.tasks]);
+  const uniqueStatuses = useMemo(
+    () => [...new Set(taskDataState.tasks.map((task) => task.status))],
+    [taskDataState.tasks]
+  );
 
   function handleSelectedTasks(event: SelectChangeEvent) {
-    console.log(event.target.value);
-    // Dispatch action to add the new task
     dispatch(SliceAction.filterTasks(event.target.value));
   }
-  if (!uniqueStatuses.length)
+
+  if (!uniqueStatuses.length) {
     return (
       <Grid2
         container
@@ -45,83 +39,73 @@ export default function SearchBox() {
           px: "2rem",
           mx: 1,
           py: 1,
-          minHeight: "13vh",
-          "@media (max-width:600px)": {
-            minHeight: "10vh",
-          },
-          "@media (max-width:400px)": {
-            minHeight: "8vh",
-          },
+          minHeight: { xs: "8vh", sm: "10vh", md: "13vh" },
 
-          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+          textAlign: "center",
         }}
       >
         <Typography
           sx={{
             color: "text.secondary",
-            fontSize: "0.8rem",
-            "@media (max-width:600px)": {
-              fontSize: "0.6rem",
-            },
-            "@media (max-width:400px)": {
-              fontSize: "0.4rem",
-            },
+
+            fontSize: { xs: "0.6rem", sm: "0.8rem", md: "1rem" },
           }}
         >
-          By submit new task, you can filter tasks by their status🥳🥳
+          By submitting a new task, you can filter tasks by their status🥳🥳
         </Typography>
       </Grid2>
     );
+  }
 
   return (
     <Grid2
       container
       spacing={2}
-      direction="column"
       alignItems="center"
       justifyContent="center"
       sx={{
-        px: "2rem",
-        mx: 1,
-        py: 1,
-
-        maxHeight: "13vh",
-
+        px: { xs: 1, sm: 2 },
+        mx: { xs: "auto", sm: 1 },
+        py: { xs: 1, sm: 2 },
+        my: 1,
+        maxHeight: { xs: "10vh", sm: "13vh" },
         boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+        textAlign: "center",
       }}
     >
       <FormControl
         variant="standard"
         sx={{
-          minWidth: 120,
-          "@media (max-width:600px)": {
-            minWidth: 90,
-          },
-          "@media (max-width:400px)": {
-            minWidth: 40,
-          },
+          minWidth: { xs: 90, sm: 120 },
+          width: "100%",
+          mb: 1,
         }}
       >
         <InputLabel id="statusSelected">Choose Status</InputLabel>
         <Select
           labelId="statusSelected"
           id="statusSelected"
-          value={
-            taskDataState.selectedStatus ? taskDataState.selectedStatus : ""
-          }
+          value={taskDataState.selectedStatus || ""}
           label="Status"
           sx={{ width: "100%" }}
           onChange={handleSelectedTasks}
         >
           <MenuItem value={"ALL"}>ALL</MenuItem>
-          {uniqueStatuses.map((state) => (
-            <MenuItem value={state}>{state}</MenuItem>
+          {uniqueStatuses.map((status) => (
+            <MenuItem key={status} value={status}>
+              {status}
+            </MenuItem>
           ))}
         </Select>
+        <Typography
+          sx={{
+            color: "text.secondary",
+            fontSize: { xs: "0.4rem", sm: "0.5rem" },
+          }}
+        >
+          Note: Only in "ALL" drag and drop is available
+        </Typography>
       </FormControl>
-      <Typography sx={{ color: "text.secondary", fontSize: "0.5rem" }}>
-        Note: Only in "ALL" drag and drop is avalaible
-      </Typography>
     </Grid2>
   );
 }

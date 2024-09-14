@@ -24,25 +24,41 @@ export default function TaskCard() {
   }
   let content;
   if (taskDataState.selectedTaskId) {
-    const task = taskDataState.tasks.find(
+    const selectedTask = taskDataState.tasks.find(
       (task) => task.id === taskDataState.selectedTaskId
     );
     let cardColor;
-    if (task?.status === "TO DO") {
+    if (selectedTask?.status === "TO DO") {
       cardColor = "#fff8f8";
-    } else if (task?.status === "IN PROGRESS") {
+    } else if (selectedTask?.status === "IN PROGRESS") {
       cardColor = "#b6d1fc";
     } else {
       cardColor = "#06D6A0";
     }
     content = (
-      <Card sx={{ mx: "auto", width: "90%", px: 1, bgcolor: cardColor }}>
+      <Card
+        sx={{
+          mx: "auto",
+          width: { xs: "100%", sm: "90%" },
+          px: 1,
+          bgcolor: cardColor,
+        }}
+      >
         <CardContent>
           <Grid2 container spacing={2}>
-            <Grid2 size={10} direction={"column"} container>
+            <Grid2
+              size={{ xs: 12, sm: 10 }}
+              container
+              direction="column"
+              sx={{ mb: 2 }}
+            >
               <Typography
                 variant="body2"
-                sx={{ mt: "0.8rem", color: "text.secondary" }}
+                sx={{
+                  mt: "0.8rem",
+                  color: "text.secondary",
+                  fontSize: { xs: "0.8rem", sm: "1rem" },
+                }}
               >
                 Task Title
               </Typography>
@@ -50,33 +66,43 @@ export default function TaskCard() {
                 variant="h5"
                 component="div"
                 sx={{
-                  whiteSpace: "normal", // This allows wrapping to the next line
-                  overflow: "hidden", // Keeps the text within the container
-                  textOverflow: "ellipsis", // Shows "..." when text is truncated
+                  fontSize: { xs: "1rem", sm: "1.5rem" },
+                  whiteSpace: "normal",
+                  overflow: "auto",
+                  textOverflow: "ellipsis",
                 }}
               >
-                {task?.title.length > 30
-                  ? task?.title.slice(0, 30) + "..."
-                  : task?.title}
+                {selectedTask.title}
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ mt: "0.8rem", color: "text.secondary" }}
+                sx={{
+                  mt: "0.8rem",
+                  color: "text.secondary",
+                  fontSize: { xs: "0.8rem", sm: "1rem" },
+                }}
               >
                 Task Description
               </Typography>
               <Typography
                 variant="h6"
                 component="div"
-                sx={{ color: "text.secondary" }}
+                sx={{
+                  color: "text.secondary",
+                  fontSize: { xs: "1rem", sm: "1.2rem" },
+                }}
               >
-                {task?.description}
+                {selectedTask?.description}
               </Typography>
             </Grid2>
-            <Grid2 size={2} direction={"column"} container>
+            <Grid2 size={{ xs: 12, sm: 2 }} container direction="column">
               <Typography
                 variant="body2"
-                sx={{ mt: "0.8rem", color: "text.secondary" }}
+                sx={{
+                  mt: "0.8rem",
+                  color: "text.secondary",
+                  fontSize: { xs: "0.8rem", sm: "1rem" },
+                }}
               >
                 Status
               </Typography>
@@ -85,16 +111,18 @@ export default function TaskCard() {
                 component="div"
                 sx={{
                   color: "text.secondary",
-                  width: "100%",
-                  fontSize: "0.85rem",
+                  fontSize: { xs: "0.9rem", sm: "1.1rem" },
                   fontWeight: 600,
                 }}
               >
-                {task?.status}
+                {selectedTask?.status}
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ mt: "0.8rem", color: "text.secondary" }}
+                sx={{
+                  fontSize: { xs: "0.8rem", sm: "1rem" },
+                  color: "text.secondary",
+                }}
               >
                 Create Date
               </Typography>
@@ -103,16 +131,18 @@ export default function TaskCard() {
                 component="div"
                 sx={{
                   color: "text.secondary",
-                  fontSize: "0.85rem",
+                  fontSize: { xs: "0.9rem", sm: "1.1rem" },
                   fontWeight: 600,
                 }}
               >
-                {task?.createDate}
+                {selectedTask?.createDate}
               </Typography>
-
               <Typography
                 variant="body2"
-                sx={{ mt: "0.8rem", color: "text.secondary" }}
+                sx={{
+                  fontSize: { xs: "0.8rem", sm: "1rem" },
+                  color: "text.secondary",
+                }}
               >
                 Due Date
               </Typography>
@@ -121,17 +151,17 @@ export default function TaskCard() {
                 component="div"
                 sx={{
                   color: "text.secondary",
-                  fontSize: "0.85rem",
+                  fontSize: { xs: "0.9rem", sm: "1.1rem" },
                   fontWeight: 600,
                 }}
               >
-                {task?.dueDate}
+                {selectedTask?.dueDate}
               </Typography>
 
               <Button
                 sx={{
                   mt: 3,
-                  fontSize: "0.7rem",
+                  fontSize: { xs: "0.6rem", sm: "0.7rem" },
                   fontWeight: 700,
                   width: "100%",
                 }}
@@ -140,12 +170,7 @@ export default function TaskCard() {
               >
                 Change Status
               </Button>
-              <Grid2
-                container
-                alignItems="center"
-                justifyContent="center"
-                sx={{ mt: 2 }}
-              >
+              <Grid2 container alignItems="center" justifyContent="center">
                 <Grid2
                   size={6}
                   container
@@ -153,9 +178,7 @@ export default function TaskCard() {
                   justifyContent="center"
                 >
                   <Button
-                    sx={{
-                      bgcolor: "red",
-                    }}
+                    sx={{ bgcolor: "red" }}
                     variant="contained"
                     onClick={handleDeleteTask}
                   >
@@ -169,9 +192,7 @@ export default function TaskCard() {
                   justifyContent="center"
                 >
                   <Button
-                    sx={{
-                      bgcolor: "GrayText",
-                    }}
+                    sx={{ bgcolor: "GrayText" }}
                     variant="contained"
                     onClick={handleEditTask}
                   >
@@ -195,16 +216,11 @@ export default function TaskCard() {
                   color: "#333333",
                   textAlign: "center",
                   fontWeight: "600",
-                  fontSize: "1rem",
-                  "@media (max-width:600px)": {
-                    fontSize: "0.6rem",
-                  },
-                  "@media (max-width:400px)": {
-                    fontSize: "0.4rem",
-                  },
+                  fontSize: { xs: "0.6rem", sm: "1rem" },
+                  px: 1,
                 }}
               >
-                No task selected! Please select one from list 🔎
+                No task selected! Please select one from the list 🔎
               </Typography>
             </Grid2>
           </Grid2>

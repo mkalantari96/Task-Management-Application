@@ -1,4 +1,4 @@
-import { Grid2 } from "@mui/material";
+import { Grid, Grid2 } from "@mui/material";
 import SideBar from "./components/SideBar";
 import TaskCard from "./components/TaskCard";
 import { useSelector } from "react-redux";
@@ -21,29 +21,30 @@ function App() {
     <Grid2
       container
       columnSpacing={2}
-      alignItems="flex-start" // Prevent vertical movement
+      alignItems="flex-start"
       justifyContent="center"
       size={10}
       sx={{
-        flexGrow: 0,
+        flexGrow: 1,
+        p: { xs: 1, sm: 0 },
         my: "2rem",
         mx: "auto",
         height: "90vh",
-        overflowY: "hidden",
+        overflowY: { xs: "auto", sm: "hidden" },
         bgcolor: "#cccaca",
         border: "1px solid",
         borderColor: "grey.300",
         borderRadius: 5,
       }}
     >
-      <Grid2 size={3} container>
+      <Grid2 size={{ xs: 12, sm: 3 }} container>
         <SideBar />
       </Grid2>
       <Grid2
-        size={9}
+        size={{ xs: 12, sm: 9 }}
         container
         sx={{
-          flexGrow: 0,
+          flexGrow: 1,
           my: "2rem",
         }}
       >

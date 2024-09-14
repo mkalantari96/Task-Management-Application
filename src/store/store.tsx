@@ -78,9 +78,12 @@ const taskDataSlicer = createSlice({
       state.addNewTask = false;
     },
     showTaskSelected(state, action) {
-      console.log(action.payload);
       state.addNewTask = false;
-      state.selectedTaskId = action.payload;
+      if (state.selectedTaskId === action.payload) {
+        state.selectedTaskId = undefined;
+      } else {
+        state.selectedTaskId = action.payload;
+      }
     },
     setDragItem(state, action) {
       state.draggingItem = action.payload;

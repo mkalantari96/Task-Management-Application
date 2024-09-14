@@ -1,7 +1,6 @@
 import { Grid2, TextField, Button, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { SliceAction } from "../store/store"; // Import the actions from your store
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { SliceAction } from "../store/store";
 import { TaskState } from "../types";
 import { ChangeEvent } from "react";
 import LogoAndTitle from "./LogoAndTitle";
@@ -11,22 +10,18 @@ export default function NewTask() {
     (state: { taskData: TaskState }) => state.taskData
   );
   const dispatch = useDispatch();
-  dispatch(SliceAction.addNewTaskRun());
-  console.log(taskDataStatus.addNewTask);
 
   function formatCurrentDate() {
     const currentDate = new Date();
-
     const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0"); //
-    const day = String(currentDate.getDate()).padStart(2, "0"); // Pad
-
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   }
 
-  // Handle form submission
   function handleAddnewTask(event: ChangeEvent<HTMLFormElement>) {
     event.preventDefault();
+    dispatch(SliceAction.addNewTaskRun());
     const fd = new FormData(event.target);
     const taskData = {
       title: fd.get("title") as string,
@@ -36,7 +31,7 @@ export default function NewTask() {
 
     dispatch(
       SliceAction.addTask({
-        id: Date.now().toString(), // Generate a unique ID for the task
+        id: Date.now().toString(),
         title: taskData.title,
         description: taskData.description,
         createDate: formatCurrentDate(),
@@ -50,11 +45,6 @@ export default function NewTask() {
 
   function handleCancelSubmit() {
     dispatch(SliceAction.cancelAddNewTask());
-    return (
-      <div>
-        <LogoAndTitle />
-      </div>
-    );
   }
 
   return (
@@ -62,85 +52,82 @@ export default function NewTask() {
       container
       spacing={2}
       direction="column"
-      alignItems="flex-start" // Prevent vertical movement
+      alignItems="center"
       justifyContent="center"
       sx={{
-        flexGrow: 0,
-        width: "80%",
-        px: "2rem",
+        width: { xs: "90%", sm: "80%" },
+        px: { xs: "1rem", sm: "2rem" },
         py: "1rem",
         mx: "auto",
-
         bgcolor: "#ffdcb5",
         color: "grey.800",
         border: "1px solid",
         borderColor: "grey.300",
         borderRadius: 2,
         textAlign: "center",
-        fontSize: "0.875rem",
-        fontWeight: "800",
         boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
       }}
     >
-      <Typography sx={{ color: "black", fontWeight: 800 }}>
+      <Typography sx={{ color: "black", fontWeight: 800, mb: "1rem" }}>
         Submit New Task
       </Typography>
-      <form onSubmit={handleAddnewTask}>
-        <div>
-          <TextField
-            name="title"
-            id="title"
-            type="text"
-            color="primary"
-            label="Task Title"
-            variant="standard"
-            multiline
-            required
-            fullWidth
-          />
-          <TextField
-            name="description"
-            id="description"
-            type="text"
-            color="primary"
-            label="Task Description"
-            variant="standard"
-            multiline
-            rows={10}
-            required
-            fullWidth
-          />
-
-          <TextField
-            sx={{ mt: "1rem" }}
-            name="dueDate"
-            label="Due Date"
-            id="dueDate"
-            type="date"
-            required
-            slotProps={{
-              inputLabel: {
-                shrink: true,
-              },
-            }}
-          />
-        </div>
-        <div style={{ marginTop: "1rem" }}>
-          {taskDataStatus.selectedTaskId ? (
+      <form onSubmit={handleAddnewTask} style={{ width: "100%" }}>
+        <TextField
+          name="title"
+          id="title"
+          type="text"
+          label="Task Title"
+          variant="outlined"
+          multiline
+          required
+          fullWidth
+          margin="normal"
+          sx={{ overflow: "visible" }}
+        />
+        <TextField
+          name="description"
+          id="description"
+          type="text"
+          label="Task Description"
+          variant="outlined"
+          multiline
+          rows={4}
+          required
+          fullWidth
+          margin="normal"
+          sx={{ overflow: "visible" }}
+        />
+        <TextField
+          name="dueDate"
+          label="Due Date"
+          id="dueDate"
+          type="date"
+          required
+          InputLabelProps={{ shrink: true }}
+          fullWidth
+          margin="normal"
+          sx={{ overflow: "visible" }}
+        />
+        <div
+          style={{
+            marginTop: "1rem",
+            display: "flex",
+            justifyContent: "center",
+            gap: "1rem",
+          }}
+        >
+          {taskDataStatus.selectedTaskId && (
             <Button
               type="button"
-              sx={{ bgcolor: "gray", color: "#fff", mx: "0.5rem" }}
               onClick={handleCancelSubmit}
+              color="secondary"
+              variant="outlined"
             >
               Cancel
             </Button>
-          ) : (
-            <></>
           )}
-          <Button
-            type="submit"
-            sx={{ bgcolor: "green", color: "#fff", mx: "0.5rem" }}
-          >
+
+          <Button type="submit" color="primary" variant="contained">
             Submit
           </Button>
         </div>
