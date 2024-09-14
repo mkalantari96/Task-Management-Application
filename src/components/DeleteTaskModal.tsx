@@ -9,14 +9,16 @@ import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { SliceAction } from "../store/store";
-
+import { TaskState } from "../types";
 const status = ["YES", "NO"];
 
 export default function DeleteTaskModal() {
-  const taskDataState = useSelector((state) => state.taskData);
+  const taskDataState = useSelector(
+    (state: { taskData: TaskState }) => state.taskData
+  );
   const dispatch = useDispatch();
 
-  function handleListItemClick(status) {
+  function handleListItemClick(status: string) {
     if (status === "YES") {
       dispatch(SliceAction.deleteTask());
       dispatch(SliceAction.showDeletingStatus());
@@ -33,7 +35,7 @@ export default function DeleteTaskModal() {
 
   return (
     <Dialog onClose={handleClose} open={taskDataState.deletingTask}>
-      <DialogTitle>Choose Status</DialogTitle>
+      <DialogTitle>Are You Sure?</DialogTitle>
       <List sx={{ pt: 0, px: "0.7rem" }}>
         {status.map((status) => (
           <ListItem disableGutters key={status}>

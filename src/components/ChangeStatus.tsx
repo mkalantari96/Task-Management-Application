@@ -10,16 +10,21 @@ import NotStartedOutlinedIcon from "@mui/icons-material/NotStartedOutlined";
 import StopCircleOutlinedIcon from "@mui/icons-material/StopCircleOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { SliceAction } from "../store/store";
+import { TaskState } from "../types";
 
 const status = ["TO DO", "IN PROGRESS", "DONE"];
 
 export default function ChangeStatus() {
-  const taskDataState = useSelector((state) => state.taskData);
+  const taskDataState = useSelector(
+    (state: { taskData: TaskState }) => state.taskData
+  );
   const dispatch = useDispatch();
 
-  function handleListItemClick(status) {
+  function handleListItemClick(status: string) {
     dispatch(SliceAction.updateStatus(status));
     dispatch(SliceAction.showChangeStatus());
+    if (taskDataState.selectedStatus)
+      dispatch(SliceAction.filterTasks(taskDataState.selectedStatus));
   }
 
   function handleClose() {

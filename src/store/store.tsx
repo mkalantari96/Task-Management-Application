@@ -1,39 +1,39 @@
-import NotStartedOutlinedIcon from "@mui/icons-material/NotStartedOutlined";
+import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TaskState, Task, TaskCreate } from "../types";
 
-import { configureStore, createSlice } from "@reduxjs/toolkit";
-
-const getTasksFromLocalStorage = () => {
+const getTasksFromLocalStorage = (): Task[] => {
   const storedTasks = localStorage.getItem("tasks");
   return storedTasks ? JSON.parse(storedTasks) : [];
 };
 
-// Helper function to save tasks to local storage
-const saveTasksToLocalStorage = (tasks) => {
+const saveTasksToLocalStorage = (tasks: Task[]): void => {
   localStorage.setItem("tasks", JSON.stringify(tasks));
+};
+
+const initialState: TaskState = {
+  selectedTaskId: undefined,
+  tasks: getTasksFromLocalStorage(),
+  addNewTask: false,
+  changeStatus: false,
+  deletingTask: false,
+  draggingItem: null,
+  filterTask: [],
+  selectedStatus: "ALL",
+  editingTask: false,
 };
 
 const taskDataSlicer = createSlice({
   name: "taskData",
-  initialState: {
-    selectedTaskId: undefined,
-    tasks: getTasksFromLocalStorage(),
-    addNewTask: false,
-    changeStatus: false,
-    deletingTask: false,
-    draggingItem: null,
-    filterTask: [],
-    selectedStatus: "ALL",
-  },
+  initialState,
   reducers: {
-    addTask(state, action) {
-      const taskDataDetails = {
+    addTask(state, action: PayloadAction<TaskCreate>) {
+      const taskDataDetails: Task = {
         id: action.payload.id,
         title: action.payload.title,
         description: action.payload.description,
-        status: "TO DO",
         createDate: action.payload.createDate,
         dueDate: action.payload.dueDate,
-        icon: <NotStartedOutlinedIcon />,
+        status: "TO DO",
       };
 
       state.tasks.push(taskDataDetails);
@@ -64,7 +64,7 @@ const taskDataSlicer = createSlice({
         state.deletingTask = true;
       }
     },
-    updateStatus(state, action) {
+    updateStatus(state, action: PayloadAction<string>) {
       const task = state.tasks.find((task) => task.id === state.selectedTaskId);
       if (task) {
         task.status = action.payload;
@@ -86,8 +86,12 @@ const taskDataSlicer = createSlice({
       state.draggingItem = action.payload;
     },
     reorderTasksList(state, action) {
-      state.tasks = action.payload;
-      saveTasksToLocalStorage(state.tasks);
+      if (state.selectedStatus !== "ALL") {
+        state.filterTask = action.payload;
+      } else {
+        state.tasks = action.payload;
+        saveTasksToLocalStorage(state.tasks);
+      }
     },
     filterTasks(state, action) {
       state.filterTask = [];
@@ -101,10 +105,27 @@ const taskDataSlicer = createSlice({
         );
       }
     },
+    editingTaskMode(state) {
+      if (state.editingTask) {
+        state.editingTask = false;
+      } else {
+        state.editingTask = true;
+      }
+    },
+    editTaskData(state, action: PayloadAction<Task>) {
+      const task = state.tasks.find((task) => task.id === state.selectedTaskId);
+
+      if (task) {
+        task.title = action.payload.title;
+        task.description = action.payload.description;
+        task.dueDate = action.payload.dueDate;
+        task.status = action.payload.status;
+        saveTasksToLocalStorage(state.tasks);
+      }
+    },
   },
 });
 
-// Corrected store configuration
 export const Store = configureStore({
   reducer: { taskData: taskDataSlicer.reducer },
 });

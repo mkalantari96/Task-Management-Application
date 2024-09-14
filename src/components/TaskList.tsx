@@ -1,5 +1,4 @@
 import {
-  Divider,
   List,
   ListItem,
   ListItemButton,
@@ -11,16 +10,19 @@ import {
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import NotStartedOutlinedIcon from "@mui/icons-material/NotStartedOutlined";
 import StopCircleOutlinedIcon from "@mui/icons-material/StopCircleOutlined";
+import { TaskListProps, TaskState } from "../types";
 import { useDispatch } from "react-redux";
 import { SliceAction } from "../store/store";
 import { useSelector } from "react-redux";
 
-export default function TaskList({ tasks, color, header }) {
-  const taskDataState = useSelector((state) => state.taskData);
+export default function TaskList({ tasks, color, header }: TaskListProps) {
+  const taskDataState = useSelector(
+    (state: { taskData: TaskState }) => state.taskData
+  );
+
   const dispatch = useDispatch();
   let dataOfTasks;
-  function handleClickTask(id) {
-    console.log(id);
+  function handleClickTask(id: string) {
     dispatch(SliceAction.showTaskSelected(id));
   }
 
@@ -40,10 +42,7 @@ export default function TaskList({ tasks, color, header }) {
     e.preventDefault();
   }
 
-  function handleOnDrop(
-    e: React.DragEvent<HTMLDivElement>,
-    dropId: number | string
-  ) {
+  function handleOnDrop(dropId: number | string) {
     if (!taskDataState.draggingItem) return;
 
     const draggedIndex = tasks.findIndex(
@@ -58,6 +57,9 @@ export default function TaskList({ tasks, color, header }) {
       const [draggedTask] = updatedTasks.splice(draggedIndex, 1);
       updatedTasks.splice(dropIndex, 0, draggedTask);
       dispatch(SliceAction.reorderTasksList(updatedTasks));
+      if (taskDataState.selectedStatus) {
+        dispatch(SliceAction.filterTasks(taskDataState.selectedStatus));
+      }
     }
 
     dispatch(SliceAction.setDragItem(null));
@@ -80,25 +82,27 @@ export default function TaskList({ tasks, color, header }) {
     );
   } else {
     dataOfTasks = (
-      <List sx={{ pl: "0.8rem" }}>
+      <List sx={{ mx: "1px" }}>
         {tasks.map(({ title, id, status }) => (
           <div
             key={Number(id)}
-            draggable="true"
+            draggable={
+              taskDataState.selectedStatus === "ALL" ? "true" : "false"
+            }
             onDragStart={(e) => handleOnDragStart(e, id)}
             onDragEnd={handleOnDragEnd}
             onDragOver={handleDragOver}
-            onDrop={(e) => handleOnDrop(e, id)}
+            onDrop={() => handleOnDrop(id)}
             style={{
               backgroundColor:
                 taskDataState.selectedTaskId === id ? "GrayText" : "inherit",
               marginRight: "0.5rem",
-              padding: "0.5rem",
+              marginLeft: "0.5rem",
               borderRadius: "4px",
               cursor: "grab",
             }}
           >
-            <ListItem key={id} disablePadding>
+            <ListItem key={id}>
               <ListItemButton onClick={() => handleClickTask(id)}>
                 <ListItemText
                   primary={title}
@@ -157,9 +161,18 @@ export default function TaskList({ tasks, color, header }) {
     );
   }
   return (
-    <Grid2 spacing={2} sx={{ bgcolor: color }}>
-      <Divider />
-
+    <Grid2
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      spacing={1}
+      sx={{
+        bgcolor: color,
+        overflowY: "scroll",
+        minHeight: "44vh",
+        maxHeight: "44vh",
+      }}
+    >
       <Typography
         sx={{
           mt: 2,

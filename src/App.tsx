@@ -1,42 +1,55 @@
-import { Box } from "@mui/material";
+import { Grid2 } from "@mui/material";
 import SideBar from "./components/SideBar";
 import TaskCard from "./components/TaskCard";
 import { useSelector } from "react-redux";
 import NewTask from "./components/NewTask";
+import { TaskState } from "./types";
 
 function App() {
-  const taskDataState = useSelector((state) => state.taskData);
+  const taskDataState = useSelector(
+    (state: { taskData: TaskState }) => state.taskData
+  );
 
   let content;
-
   if (!taskDataState.tasks.length || taskDataState.addNewTask) {
     content = <NewTask />;
-  } else if (taskDataState.selectedTaskId === undefined) {
-    // If no task is selected
-    content = <TaskCard id={""} description={""} title={""} />;
   } else {
-    // Find the selected task
-    const selectedTask = taskDataState.tasks.find(
-      (task) => task.id === taskDataState.selectedTaskId
-    );
-
-    // Check if a selected task is found
-    if (selectedTask) {
-      content = (
-        <TaskCard
-          id={selectedTask.id}
-          description={selectedTask.description}
-          title={selectedTask.title}
-        />
-      );
-    }
+    content = <TaskCard />;
   }
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <SideBar />
-      {content}
-    </Box>
+    <Grid2
+      container
+      columnSpacing={2}
+      alignItems="flex-start" // Prevent vertical movement
+      justifyContent="center"
+      size={10}
+      sx={{
+        flexGrow: 0,
+        my: "2rem",
+        mx: "auto",
+        height: "90vh",
+        overflowY: "hidden",
+        bgcolor: "#cccaca",
+        border: "1px solid",
+        borderColor: "grey.300",
+        borderRadius: 5,
+      }}
+    >
+      <Grid2 size={3} container>
+        <SideBar />
+      </Grid2>
+      <Grid2
+        size={9}
+        container
+        sx={{
+          flexGrow: 0,
+          my: "2rem",
+        }}
+      >
+        {content}
+      </Grid2>
+    </Grid2>
   );
 }
 

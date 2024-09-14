@@ -1,29 +1,39 @@
-import { Grid2, TextField, Button, InputLabel } from "@mui/material";
+import { Grid2, TextField, Button, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { SliceAction } from "../store/store"; // Import the actions from your store
 import { useSelector } from "react-redux";
+import { TaskState } from "../types";
+import { ChangeEvent } from "react";
+import LogoAndTitle from "./LogoAndTitle";
 
 export default function NewTask() {
-  const taskDataStatus = useSelector((state) => state.taskData);
+  const taskDataStatus = useSelector(
+    (state: { taskData: TaskState }) => state.taskData
+  );
   const dispatch = useDispatch();
+  dispatch(SliceAction.addNewTaskRun());
+  console.log(taskDataStatus.addNewTask);
 
   function formatCurrentDate() {
     const currentDate = new Date();
 
     const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Month is 0-based, so add 1 and pad with leading zero
-    const day = String(currentDate.getDate()).padStart(2, "0"); // Pad with leading zero
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0"); //
+    const day = String(currentDate.getDate()).padStart(2, "0"); // Pad
 
     return `${year}-${month}-${day}`;
   }
 
   // Handle form submission
-  function handleAddnewTask(event) {
-    event.preventDefault(); // Prevent form from refreshing the page
+  function handleAddnewTask(event: ChangeEvent<HTMLFormElement>) {
+    event.preventDefault();
     const fd = new FormData(event.target);
-    const taskData = Object.fromEntries(fd.entries()); // Convert form data to an object
-    console.log(taskData);
-    // Dispatch action to add the new task
+    const taskData = {
+      title: fd.get("title") as string,
+      description: fd.get("description") as string | undefined,
+      dueDate: fd.get("dueDate") as string | undefined,
+    };
+
     dispatch(
       SliceAction.addTask({
         id: Date.now().toString(), // Generate a unique ID for the task
@@ -38,18 +48,28 @@ export default function NewTask() {
       dispatch(SliceAction.filterTasks(taskDataStatus.selectedStatus));
   }
 
+  function handleCancelSubmit() {
+    dispatch(SliceAction.cancelAddNewTask());
+    return (
+      <div>
+        <LogoAndTitle />
+      </div>
+    );
+  }
+
   return (
     <Grid2
       container
       spacing={2}
       direction="column"
-      alignItems="center"
+      alignItems="flex-start" // Prevent vertical movement
       justifyContent="center"
       sx={{
-        mt: "10rem",
-        width: "1fr",
+        flexGrow: 0,
+        width: "80%",
         px: "2rem",
         py: "1rem",
+        mx: "auto",
 
         bgcolor: "#ffdcb5",
         color: "grey.800",
@@ -62,6 +82,9 @@ export default function NewTask() {
         boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
       }}
     >
+      <Typography sx={{ color: "black", fontWeight: 800 }}>
+        Submit New Task
+      </Typography>
       <form onSubmit={handleAddnewTask}>
         <div>
           <TextField
@@ -103,12 +126,17 @@ export default function NewTask() {
           />
         </div>
         <div style={{ marginTop: "1rem" }}>
-          <Button
-            type="button"
-            sx={{ bgcolor: "gray", color: "#fff", mx: "0.5rem" }}
-          >
-            Cancel
-          </Button>
+          {taskDataStatus.selectedTaskId ? (
+            <Button
+              type="button"
+              sx={{ bgcolor: "gray", color: "#fff", mx: "0.5rem" }}
+              onClick={handleCancelSubmit}
+            >
+              Cancel
+            </Button>
+          ) : (
+            <></>
+          )}
           <Button
             type="submit"
             sx={{ bgcolor: "green", color: "#fff", mx: "0.5rem" }}
