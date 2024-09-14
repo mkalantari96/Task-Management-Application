@@ -5,7 +5,7 @@ export interface Task {
   id: string;
   title: string;
   description?: string;
-  status: string;
+  status?: string;
   createDate?: string;
   dueDate?: string;
 }

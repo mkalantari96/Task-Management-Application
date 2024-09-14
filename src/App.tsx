@@ -11,7 +11,7 @@ function App() {
   const taskDataState = useSelector(
     (state: { taskData: TaskState }) => state.taskData
   );
-  const [show, setShow] = useState<string | undefined>(undefined);
+  const [, setShow] = useState<string | undefined>(undefined);
 
   let content;
   useEffect(() => {

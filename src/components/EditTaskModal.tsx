@@ -19,7 +19,7 @@ export default function EditTaskModal() {
   function handleEditTask(event: ChangeEvent<HTMLFormElement>) {
     event.preventDefault();
     const fd = new FormData(event.target);
-    const taskData = {
+    const taskData:Task = {
       id: taskDataState.selectedTaskId as string,
       createDate: selectedTask?.createDate,
       title: fd.get("title") as string,
