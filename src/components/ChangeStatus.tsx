@@ -7,7 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import NotStartedOutlinedIcon from "@mui/icons-material/NotStartedOutlined";
-import StopCircleOutlinedIcon from "@mui/icons-material/StopCircleOutlined";
+import DownloadingIcon from "@mui/icons-material/Downloading";
 import { useDispatch, useSelector } from "react-redux";
 import { SliceAction } from "../store/store";
 import { TaskState } from "../types";
@@ -40,8 +40,8 @@ export default function ChangeStatus() {
             <ListItemButton onClick={() => handleListItemClick(status)}>
               <ListItemAvatar>
                 {status === "DONE" && <CheckCircleOutlineIcon />}
-                {status === "TO DO" && <StopCircleOutlinedIcon />}
-                {status === "IN PROGRESS" && <NotStartedOutlinedIcon />}
+                {status === "TO DO" && <NotStartedOutlinedIcon />}
+                {status === "IN PROGRESS" && <DownloadingIcon />}
               </ListItemAvatar>
               <ListItemText primary={status} />
             </ListItemButton>
