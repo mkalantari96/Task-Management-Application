@@ -56,16 +56,6 @@ A task management application built using **React**, **TypeScript**, and **Redux
 - **Filter by Status**: Use the dropdown in the filter box to display only tasks with the selected status.
 - **Drag and Drop**: Rearrange tasks by dragging and dropping them to a new position in the list.
 
-## Future Improvements
-
-- Integration with a backend API for task persistence.
-- User authentication to support multiple users.
-- Additional customization for task priorities or categories.
-
 ## Contributing
 
 Feel free to fork this repository, submit pull requests, or raise issues. All contributions are welcome!
-
-## License
-
-This project is licensed under the MIT License.
