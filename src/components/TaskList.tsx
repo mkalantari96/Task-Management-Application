@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 
 export default function TaskList({ tasks, color, header }: TaskListProps) {
-  const [isDragMode, setIsDragMode] = useState(false);
+  const [, setIsDragMode] = useState(false);
   const taskDataState = useSelector(
     (state: { taskData: TaskState }) => state.taskData
   );

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SliceAction } from "../store/store";
 import { TaskState } from "../types";
 import { ChangeEvent } from "react";
-import LogoAndTitle from "./LogoAndTitle";
+
 
 export default function NewTask() {
   const taskDataStatus = useSelector(

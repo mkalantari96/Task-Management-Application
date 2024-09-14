@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   Grid2,
-  Fade,
   Zoom,
 } from "@mui/material";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
@@ -218,27 +217,6 @@ export default function TaskCard() {
     );
   } else {
     return <NoTaskSelected />;
-    content = (
-      <Card sx={{ mx: "auto", px: 1, bgcolor: "#fff8f8" }}>
-        <CardContent>
-          <Grid2 container spacing={2}>
-            <Grid2 size={12}>
-              <Typography
-                sx={{
-                  color: "#333333",
-                  textAlign: "center",
-                  fontWeight: "600",
-                  fontSize: { xs: "0.6rem", sm: "1rem" },
-                  px: 1,
-                }}
-              >
-                No task selected! Please select one from the list 🔎
-              </Typography>
-            </Grid2>
-          </Grid2>
-        </CardContent>
-      </Card>
-    );
   }
 
   return (
